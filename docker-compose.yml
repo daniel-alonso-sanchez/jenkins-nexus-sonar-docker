@@ -1,0 +1,23 @@
+nexus:
+  build: ./nexus
+  ports:
+    - "18081:8081"
+  expose:
+    - "18081"
+jenkins:
+  build: ./jenkins
+  ports:
+    - "18080:8080"
+  expose:
+    - "18080"
+  links:
+    - nexus:nexus
+    - sonar:sonar
+sonar:
+  build: ./sonar
+  ports:
+   - "19000:9000"
+   - "9092:9092"
+  expose:
+   - "19000"
+
