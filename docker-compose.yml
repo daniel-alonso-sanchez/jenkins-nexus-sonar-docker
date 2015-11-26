@@ -1,5 +1,11 @@
+nexusdata:
+  build: ./nexusdata
+  volumes:
+    - /opt/sonatype-work
 nexus:
   build: ./nexus
+  volumes_from:
+    - nexusdata
   ports:
     - "18081:8081"
   expose:

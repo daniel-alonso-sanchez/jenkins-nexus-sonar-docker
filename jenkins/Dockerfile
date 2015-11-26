@@ -7,17 +7,17 @@ ENV HTTPS_PROXY  http://192.168.10.145:8080
 ENV no_proxy localhost,127.0.0.1
 
 COPY plugins.txt /var/jenkins_home/plugins.txt
-#RUN /usr/local/bin/plugins.sh /var/jenkins_home/plugins.txt
+RUN /usr/local/bin/plugins.sh /var/jenkins_home/plugins.txt
 
 # Adding default Jenkins Jobs
-COPY jobs/1-github-seed-job.xml /usr/share/jenkins/ref/jobs/1-github-seed-job/config.xml
-COPY jobs/2-job-dsl-seed-job.xml /usr/share/jenkins/ref/jobs/2-job-dsl-seed-job/config.xml
-COPY jobs/3-conference-app-seed-job.xml /usr/share/jenkins/ref/jobs/3-conference-app-seed-job/config.xml
-COPY jobs/4-selenium2-maven-test.xml /usr/share/jenkins/ref/jobs/4-selenium2-maven-test/config.xml
-COPY jobs/6-conference-app-ci.xml /usr/share/jenkins/ref/jobs/conference-app-1-ci/config.xml
-COPY jobs/6-conference-app-sonar-analysis.xml /usr/share/jenkins/ref/jobs/conference-app-2-sonar-analysis/config.xml
-COPY jobs/7-conference-app-monitoring-ci.xml /usr/share/jenkins/ref/jobs/conference-app-monitoring-1-ci/config.xml
-COPY jobs/7-conference-app-monitoring-sonar-analysis.xml /usr/share/jenkins/ref/jobs/conference-app-monitoring-2-sonar-analysis/config.xml
+#COPY jobs/1-github-seed-job.xml /usr/share/jenkins/ref/jobs/1-github-seed-job/config.xml
+#COPY jobs/2-job-dsl-seed-job.xml /usr/share/jenkins/ref/jobs/2-job-dsl-seed-job/config.xml
+#COPY jobs/3-conference-app-seed-job.xml /usr/share/jenkins/ref/jobs/3-conference-app-seed-job/config.xml
+#COPY jobs/4-selenium2-maven-test.xml /usr/share/jenkins/ref/jobs/4-selenium2-maven-test/config.xml
+#COPY jobs/6-conference-app-ci.xml /usr/share/jenkins/ref/jobs/conference-app-1-ci/config.xml
+#COPY jobs/6-conference-app-sonar-analysis.xml /usr/share/jenkins/ref/jobs/conference-app-2-sonar-analysis/config.xml
+#COPY jobs/7-conference-app-monitoring-ci.xml /usr/share/jenkins/ref/jobs/conference-app-monitoring-1-ci/config.xml
+#COPY jobs/7-conference-app-monitoring-sonar-analysis.xml /usr/share/jenkins/ref/jobs/conference-app-monitoring-2-sonar-analysis/config.xml
 
 ############################################
 # Configure Jenkins
@@ -29,6 +29,9 @@ COPY config/config.xml /usr/share/jenkins/ref/config.xml
 COPY config/hudson.tasks.Maven.xml /usr/share/jenkins/ref/hudson.tasks.Maven.xml
 COPY config/hudson.plugins.groovy.Groovy.xml /usr/share/jenkins/ref/hudson.plugins.groovy.Groovy.xml
 COPY config/maven-global-settings-files.xml /usr/share/jenkins/ref/maven-global-settings-files.xml
+COPY config/hudson.plugins.sonar.SonarPublisher.xml  /usr/share/jenkins/ref/hudson.plugins.sonar.SonarPublisher.xml
+
+COPY config/hudson.plugins.sonar.SonarRunnerInstallation.xml  /usr/share/jenkins/ref/hudson.plugins.sonar.SonarRunnerInstallation.xml
 
 # SSH Keys & Credentials
 COPY config/credentials.xml /usr/share/jenkins/ref/credentials.xml
@@ -44,4 +47,12 @@ RUN ln -s  /usr/share/apache-maven-3.3.3/bin/mvn  /usr/local/bin
 RUN chmod -R 755  /usr/share/apache-maven-3.3.3 
 ENV MAVEN_HOME /usr/share/apache-maven-3.3.3
 COPY config/settings.xml /usr/share/apache-maven-3.3.3/conf
+
+#SonarRunner
+
+RUN wget --no-verbose -O /tmp/sonar-runner-dist-2.4.zip http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip
+RUN unzip  /tmp/sonar-runner-dist-2.4.zip -d /usr/share
+RUN rm -f /tmp/sonar-runner-dist-2.4.zip
+RUN chmod -R 755  /usr/share/sonar-runner-2.4
+COPY config/sonar-runner.properties /usr/share/sonar-runner-2.4/conf
 
