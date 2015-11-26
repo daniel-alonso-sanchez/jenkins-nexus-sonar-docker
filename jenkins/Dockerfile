@@ -7,7 +7,7 @@ ENV HTTPS_PROXY  http://192.168.10.145:8080
 ENV no_proxy localhost,127.0.0.1
 
 COPY plugins.txt /var/jenkins_home/plugins.txt
-RUN /usr/local/bin/plugins.sh /var/jenkins_home/plugins.txt
+#RUN /usr/local/bin/plugins.sh /var/jenkins_home/plugins.txt
 
 # Adding default Jenkins Jobs
 COPY jobs/1-github-seed-job.xml /usr/share/jenkins/ref/jobs/1-github-seed-job/config.xml
@@ -36,11 +36,12 @@ COPY config/ssh-keys/cd-demo /usr/share/jenkins/ref/.ssh/id_rsa
 COPY config/ssh-keys/cd-demo.pub /usr/share/jenkins/ref/.ssh/id_rsa.pub
 
 #maven itself
+USER root
+RUN wget --no-verbose -O /tmp/apache-maven-3.3.3-bin.zip http://archive.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip
+RUN unzip /tmp/apache-maven-3.3.3-bin.zip -d /usr/share 
+RUN rm -f /tmp/apache-maven-3.3.3-bin.zip
+RUN ln -s  /usr/share/apache-maven-3.3.3/bin/mvn  /usr/local/bin
+RUN chmod -R 755  /usr/share/apache-maven-3.3.3 
+ENV MAVEN_HOME /usr/share/apache-maven-3.3.3
+COPY config/settings.xml /usr/share/apache-maven-3.3.3/conf
 
-RUN wget --no-verbose -O /tmp/apache-maven-3.3.3.tar.gz http://archive.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
-RUN tar xzf /tmp/apache-maven-3.3.3.tar.gz -C /opt
-RUN ln -s /opt/apache-maven-3.3.3 /var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/Maven_3.3.3
-RUN ln -s /opt/apache-maven-3.3.3 /opt/maven
-RUN ln -s /opt/maven/bin/mvn /usr/local/bin
-RUN rm -f /tmp/apache-maven-3.3.3.tar.gz
-ENV MAVEN_HOME /opt/maven
