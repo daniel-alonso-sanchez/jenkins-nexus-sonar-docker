@@ -56,3 +56,12 @@ RUN rm -f /tmp/sonar-runner-dist-2.4.zip
 RUN chmod -R 755  /usr/share/sonar-runner-2.4
 COPY config/sonar-runner.properties /usr/share/sonar-runner-2.4/conf
 
+#grails
+
+RUN wget --no-verbose -O /tmp/grails-2.4.4.zip https://github.com/grails/grails-core/releases/download/v2.4.4/grails-2.4.4.zip
+RUN unzip  /tmp/grails-2.4.4.zip -d /usr/share
+RUN rm -f /tmp/grails-2.4.4.zip
+RUN chmod -R 755  /usr/share/grails-2.4.4
+COPY config/com.g2one.hudson.grails.GrailsInstallation.xml /usr/share/jenkins/ref/com.g2one.hudson.grails.GrailsInstallation.xml 
+
+

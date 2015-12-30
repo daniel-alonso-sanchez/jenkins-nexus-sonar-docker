@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<com.g2one.hudson.grails.GrailsInstallation_-DescriptorImpl plugin="grails@1.7">
+  <installations>
+    <com.g2one.hudson.grails.GrailsInstallation>
+      <name>grails224</name>
+      <home>/usr/share/grails-2.4.4</home>
+      <properties/>
+    </com.g2one.hudson.grails.GrailsInstallation>
+  </installations>
+</com.g2one.hudson.grails.GrailsInstallation_-DescriptorImpl>
